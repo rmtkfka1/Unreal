@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "Person.generated.h"
 
+class UCard;
+
 /**
  * 
  */
@@ -17,11 +19,11 @@ class F_1_API UPerson : public UObject
 public:
 	UPerson();
 
-
-
 	FORCEINLINE const FString& GetName() const;
 	FORCEINLINE void SetName(const FString& Inname);
 
+	FORCEINLINE const UCard* GetCard() const { return Card;  };
+	FORCEINLINE void SetCard(UCard* newCard) { Card = newCard; }
 
 protected:
 	UPROPERTY()
@@ -29,6 +31,14 @@ protected:
 
 	UPROPERTY()
 	int32	Year;
+
+	//Composition (UE4 방식)
+	//UPROPERTY()
+	//class UCard* Card;
+
+	//Composition (UE5 방식)
+	UPROPERTY()
+	TObjectPtr<UCard> Card;
 
 
 private:

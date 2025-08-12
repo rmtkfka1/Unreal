@@ -5,6 +5,7 @@
 #include  "Student.h"
 #include "Staff.h"
 #include "Teacher.h"
+#include "Card.h"
 UMyGameInstance::UMyGameInstance()
 {
 	SchoolName = TEXT("기본학교");
@@ -19,24 +20,18 @@ void UMyGameInstance::Init()
 
 	TArray<UPerson*> Persons = { NewObject<UStudent>(), NewObject<UTeacher>(), NewObject<UStaff>() };
 
-	//UE_LOG(LogTemp, Log, TEXT("=================="));
-
-	//for (const auto& Person : Persons)
-	//{
-	//	UE_LOG(LogTemp, Log, TEXT("구성원이름 : %s"), *Person->GetName());
-	//}
-	//
-	//UE_LOG(LogTemp, Log, TEXT("=================="));
-
 	for (const auto& Person : Persons)
 	{
-		ILessonInterface* Interface = Cast<ILessonInterface>(Person);
+		const UCard* Card =Person->GetCard();
+		ECardType CardType= Card->GetTypeCard();
+		UE_LOG(LogTemp, Log, TEXT("%s님이 소유한 카드 종류 %d"), *Person->GetName(), CardType);
 
-		if (Interface)
+		const UEnum* CardEnumType = FindObject<UEnum>(nullptr, TEXT("/Script/F_1.EcardType"));
+		if (CardEnumType)
 		{
-			Interface->DoLesson();
+			FString CardMetaData =  CardEnumType->GetDisplayNameTextByValue((int64)CardType).ToString();
+			UE_LOG(LogTemp, Log, TEXT("%s님이 소유한 카드 종류 %s"), *Person->GetName(), *CardMetaData);
 		}
-
 	}
 
 	UE_LOG(LogTemp, Log, TEXT("=================="));

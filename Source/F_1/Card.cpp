@@ -1,10 +1,10 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Staff.h"
 #include "Card.h"
-UStaff::UStaff()
+
+UCard::UCard()
 {
-	Name = TEXT("유직원");
-	Card->SetCardType(ECardType::Staff);
+	Id = 0;
+	CardType = ECardType::Invaild;
 }

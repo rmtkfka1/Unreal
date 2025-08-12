@@ -2,6 +2,7 @@
 
 
 #include "Teacher.h"
+#include "Card.h"
 
 UTeacher::UTeacher()
 {
@@ -9,6 +10,7 @@ UTeacher::UTeacher()
 	Year = 3;
 	Id = 1;
 
+	Card->SetCardType(ECardType::Teacher);
 }
 
 void UTeacher::DoLesson()
