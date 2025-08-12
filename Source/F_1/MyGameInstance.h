@@ -15,7 +15,7 @@ class F_1_API UMyGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	void Init() override;
+	virtual void Init() override;
 	
 private:
 };
