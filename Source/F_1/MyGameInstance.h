@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "MyGameInstance.generated.h"
 
+class UCourseInfo;
 /**
  * 
  */
@@ -21,5 +22,10 @@ public:
 private:
 	UPROPERTY()
 	FString SchoolName;
+
+
+	//DELETEGATE
+	UPROPERTY()
+	TObjectPtr<UCourseInfo> CourseInfo;
 	
 };

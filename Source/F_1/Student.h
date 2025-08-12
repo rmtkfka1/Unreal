@@ -20,6 +20,9 @@ public:
 	UStudent();
 	virtual void DoLesson() override;
 
+	//DeleGate
+	void GetNotification(const FString& School, const FString& NewCourseInfo);
+
 private:
 	UPROPERTY()
 	int32 Id;
