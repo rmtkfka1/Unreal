@@ -17,11 +17,10 @@ class F_1_API UPerson : public UObject
 public:
 	UPerson();
 
-	UFUNCTION()
-	virtual void DoLesson();
 
-	const FString& GetName() const;
-	void SetName(const FString& Inname);
+
+	FORCEINLINE const FString& GetName() const;
+	FORCEINLINE void SetName(const FString& Inname);
 
 
 protected:

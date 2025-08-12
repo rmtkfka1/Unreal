@@ -13,7 +13,6 @@ UTeacher::UTeacher()
 
 void UTeacher::DoLesson()
 {
-	Super::DoLesson();
 
 	UE_LOG(LogTemp, Log, TEXT("%d 년차선생님 %d번 %s 님이 수업을 강의합니다."), Year, Id, *Name);
 
