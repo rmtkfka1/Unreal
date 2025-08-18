@@ -6,6 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "MyGameInstance.generated.h"
 
+
 class UCourseInfo;
 /**
  * 
@@ -27,5 +28,6 @@ private:
 	//DELETEGATE
 	UPROPERTY()
 	TObjectPtr<UCourseInfo> CourseInfo;
-	
+
+
 };
