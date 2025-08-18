@@ -1,5 +1,6 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
+using System.IO;
 using UnrealBuildTool;
 
 public class F_1 : ModuleRules
@@ -7,8 +8,11 @@ public class F_1 : ModuleRules
 	public F_1(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+
+        //PublicIncludePaths.AddRange(new string[] { Path.Combine(ModuleDirectory, "Chap1_12") });
+        //PrivateIncludePaths.AddRange(new string[] { Path.Combine(ModuleDirectory, "Chap1_12") });
+
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
