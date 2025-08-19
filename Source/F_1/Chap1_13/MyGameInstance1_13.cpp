@@ -4,9 +4,27 @@
 #include "MyGameInstance1_13.h"
 #include "MyObject_1_13.h"
 #include "JsonObjectConverter.h"
+#include "UObject/SavePackage.h"
+
+const  FString UMyGameInstance1_13::PackageName = TEXT("/Game/Student");
+const  FString UMyGameInstance1_13::AssetName = TEXT("Student");
 
 UMyGameInstance1_13::UMyGameInstance1_13()
 {
+	/*const FString TopSoftObjectPath = FString::Printf(TEXT("%s.%s"), *PackageName, *AssetName);
+	static ConstructorHelpers::FObjectFinder<UMyObject_1_13> MyObjectFinder(*TopSoftObjectPath);
+
+	if (MyObjectFinder.Succeeded())
+	{
+		MyObject = MyObjectFinder.Object;
+		UE_LOG(LogTemp, Log, TEXT("생성자  MyObject found: Order = %d, Name = %s"), MyObject->GetOrder(), *MyObject->GetName());
+	}
+	else
+	{
+		MyObject = nullptr;
+		UE_LOG(LogTemp, Warning, TEXT("MyObject not found at path: %s"), *TopSoftObjectPath);
+	}*/
+
 }
 
 void UMyGameInstance1_13::Init()
@@ -153,4 +171,125 @@ void UMyGameInstance1_13::Init()
 	}
 
 
+
+
+	//1-14
+	//패키지 저장 및 로드
+
+	SavePackage();
+
+	//LoadPackageMy();
+
+	//LoadStudentObject();
+
+	//StreamableManager를 사용한 비동기 로드
+	const FString TopSoftObjectPath = FString::Printf(TEXT("%s.%s"), *PackageName, *AssetName);
+	StreamableHandle = StreamableManager.RequestAsyncLoad(TopSoftObjectPath, 
+		[&]() {
+			if(StreamableHandle.IsValid() && StreamableHandle->HasLoadCompleted())
+			{
+				UMyObject_1_13* TopStudent = Cast<UMyObject_1_13>(StreamableHandle->GetLoadedAsset());
+
+				if (TopStudent)
+				{
+					UE_LOG(LogTemp, Log, TEXT("Loaded Top Student: Name = %s, Order = %d"), *TopStudent->GetName(), TopStudent->GetOrder());
+				}
+				else
+				{
+					UE_LOG(LogTemp, Error, TEXT("Failed to load Top Student from path: %s"), *TopSoftObjectPath);
+				}
+
+				StreamableHandle->ReleaseHandle();
+				StreamableHandle.Reset();
+
+
+			}
+		});
+
+
+
 }
+
+void UMyGameInstance1_13::SavePackage() const
+{
+
+	UPackage* ExistingPackage = ::LoadPackage(nullptr, *PackageName,LOAD_None);
+
+	if (ExistingPackage)
+	{
+		ExistingPackage->FullyLoad();
+	}
+
+
+	//패키지생성
+	UPackage* Package = CreatePackage(*PackageName);
+	EObjectFlags Flags = RF_Public | RF_Standalone;
+
+	UMyObject_1_13* TopStudent = NewObject<UMyObject_1_13>(Package,UMyObject_1_13::StaticClass(),*AssetName,Flags);
+	TopStudent->SetName(TEXT("김상혁"));
+	TopStudent->SetOrder(94);
+
+	const int32  NumofSubs = 10;
+
+	for (int32 i = 0; i < NumofSubs; ++i)
+	{
+		FString SubName = FString::Printf(TEXT("Subject %d"), i + 1);
+		UMyObject_1_13* Subject = NewObject<UMyObject_1_13>(TopStudent, UMyObject_1_13::StaticClass(), *SubName, Flags);
+		Subject->SetName(FString::Printf(TEXT("학생%d"), i));
+		Subject->SetOrder(i + 1);
+	}
+
+	const FString PackageFileName = FPackageName::LongPackageNameToFilename(PackageName, FPackageName::GetAssetPackageExtension());
+
+	FSavePackageArgs SaveArgs;
+	SaveArgs.TopLevelFlags = Flags;
+
+	if(UPackage::SavePackage(Package,nullptr,*PackageFileName, SaveArgs))
+	{ 
+		UE_LOG(LogTemp, Log, TEXT("Package saved successfully %s:"), *PackageFileName);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Failed to save package: %s"), *PackageFileName);
+	}
+}
+void UMyGameInstance1_13::LoadPackageMy() const
+{
+	UPackage* LoadedPackage = LoadPackage(nullptr, *PackageName, LOAD_None);
+
+	if(nullptr == LoadedPackage)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to load package: %s"), *PackageName);
+		return;
+	}
+
+	LoadedPackage->FullyLoad();
+
+	UMyObject_1_13* TopStudent = FindObject<UMyObject_1_13>(LoadedPackage, *AssetName);
+
+	if (TopStudent)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Loaded Top Student: Name = %s, Order = %d"), *TopStudent->GetName(), TopStudent->GetOrder());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to find Top Student in loaded package: %s"), *PackageName);
+	}
+
+}
+void UMyGameInstance1_13::LoadStudentObject() const
+{
+	const FString TopSoftObjectPath = FString::Printf(TEXT("%s.%s"), *PackageName, *AssetName);
+
+	UMyObject_1_13* TopStudent = LoadObject<UMyObject_1_13>(nullptr, *TopSoftObjectPath);
+
+	if (TopStudent)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Loaded Top Student: Name = %s, Order = %d"), *TopStudent->GetName(), TopStudent->GetOrder());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to load Top Student from path: %s"), *TopSoftObjectPath);
+	}
+}
+;
