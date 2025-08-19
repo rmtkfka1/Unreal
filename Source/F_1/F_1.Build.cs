@@ -12,7 +12,7 @@ public class F_1 : ModuleRules
         //PublicIncludePaths.AddRange(new string[] { Path.Combine(ModuleDirectory, "Chap1_12") });
         //PrivateIncludePaths.AddRange(new string[] { Path.Combine(ModuleDirectory, "Chap1_12") });
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" ,  "Json",  "JsonUtilities" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
